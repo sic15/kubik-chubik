@@ -15,12 +15,15 @@ class TimeTable(models.Model):
     time = models.TimeField(verbose_name='время начала')
     duration = models.IntegerField(verbose_name='продолжительность')
 
+    def __str__(self):
+        return f'Начало в {self.time} в {self.weekday}'
+
 class Course(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField()
     teacher = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='teacher')
     timetable = models.ManyToManyField(TimeTable, related_name='timetable')
-    students = models.ManyToManyField(User, related_name='students')
+    students = models.ManyToManyField(User, blank=True, related_name='students')
 
     def __str__(self):
         return f'Курс {self.title}'

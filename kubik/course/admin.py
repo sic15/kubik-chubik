@@ -22,12 +22,13 @@ class CourseAdmin(admin.ModelAdmin):
 
 class MembershipInline(admin.TabularInline):
     model = Course.timetable.through
+    list_display=['weekday', 'time']
 
 class TimeTableAdmin(admin.ModelAdmin):
     inlines = [
         MembershipInline,
     ]
-    list_display=['weekday', 'time']
+    
 
 @admin.register(Course)
 class CourceAdmin(admin.ModelAdmin):

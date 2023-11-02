@@ -19,11 +19,11 @@ class TimeTable(models.Model):
         return f'Начало в {self.time} в {self.weekday}'
 
 class Course(models.Model):
-    title = models.CharField(max_length=200)
-    description = models.TextField()
-    teacher = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='teacher')
-    timetable = models.ManyToManyField(TimeTable, related_name='timetable')
-    students = models.ManyToManyField(User, blank=True, related_name='students')
+    title = models.CharField(max_length=200, verbose_name='Название')
+    description = models.TextField(verbose_name='Описание')
+    teacher = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='teacher', verbose_name='Преподаватель')
+    timetable = models.ManyToManyField(TimeTable, related_name='timetable', verbose_name='Расписание')
+    students = models.ManyToManyField(User, blank=True, related_name='students', verbose_name='Ученики')
 
     def __str__(self):
         return f'Курс {self.title}'

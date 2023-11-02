@@ -30,7 +30,7 @@ class User(AbstractUser):
         max_length=30,
         verbose_name='фамилия'
     )
-    type = models.CharField(max_length=20, choices=UserTipes)
+    type = models.CharField(max_length=20, choices=UserTipes, verbose_name='Роль')
 
     def __str__(self):
         return f'{self.first_name} {self.last_name}'

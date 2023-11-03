@@ -25,7 +25,7 @@ class User(AbstractUser):
         max_length=20,
         verbose_name='имя'
     )
-    middle_name = models.CharField(max_length=20, verbose_name='отчество')
+    middle_name = models.CharField(max_length=20, verbose_name='отчество', blank=True)
     last_name = models.CharField(
         max_length=30,
         verbose_name='фамилия'

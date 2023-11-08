@@ -1,6 +1,8 @@
 from django.contrib import admin
+from django import forms
 
 from .models import Course, TimeTable
+from user.models import User
 
 
 #admin.site.register(Course)
@@ -24,15 +26,28 @@ class MembershipInline(admin.TabularInline):
     model = Course.timetable.through
     list_display=['weekday', 'time']
 
+
+
 class TimeTableAdmin(admin.ModelAdmin):
     inlines = [
         MembershipInline,
     ]
     
+class CourseForm(forms.BaseModelForm):
+    
+    class Meta:
+        model = Course
+        fields = ['title', 'description', 'teacher', 'students']
+
+
 
 @admin.register(Course)
 class CourceAdmin(admin.ModelAdmin):
     inlines = [
         MembershipInline,
     ]
-    exclude = ('timetable',)
+    form = CourseForm()
+  #  exclude=['timetable']
+   # fields = ['title', 'description', 'teacher', 'students']
+    
+

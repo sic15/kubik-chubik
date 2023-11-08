@@ -1,10 +1,15 @@
 from django.contrib import admin
 
-from .models import Course, TimeTable
+from course.models import Course, TimeTable, Application, Enrollment
 
 
-#admin.site.register(Course)
+admin.site.register(Course)
 admin.site.register(TimeTable)
+admin.site.register(Enrollment)
+
+@admin.register(Application)
+class ApplicationAdmin(admin.ModelAdmin):
+    pass
 
 """
 class ItemInline(admin.StackedInline):
@@ -20,19 +25,19 @@ class CourseAdmin(admin.ModelAdmin):
    """
 
 
-class MembershipInline(admin.TabularInline):
-    model = Course.timetable.through
-    list_display=['weekday', 'time']
+# class MembershipInline(admin.TabularInline):
+#     model = Course.timetable.through
+#     list_display=['weekday', 'time']
 
-class TimeTableAdmin(admin.ModelAdmin):
-    inlines = [
-        MembershipInline,
-    ]
+# class TimeTableAdmin(admin.ModelAdmin):
+#     inlines = [
+#         MembershipInline,
+#     ]
     
 
-@admin.register(Course)
-class CourceAdmin(admin.ModelAdmin):
-    inlines = [
-        MembershipInline,
-    ]
-    exclude = ('timetable',)
+# @admin.register(Course)
+# class CourceAdmin(admin.ModelAdmin):
+#     inlines = [
+#         MembershipInline,
+#     ]
+#     exclude = ('timetable',)

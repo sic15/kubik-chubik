@@ -20,7 +20,6 @@ class ApplicationAdmin(admin.ModelAdmin):
             Enrollment.objects.get_or_create(**context)
             Application.objects.filter(id=obj.id).delete()
          #   obj.approved = 1
-        #    print(obj.__dict__)
             return HttpResponseRedirect("../")
         return super().response_change(request, obj)
 
@@ -67,17 +66,6 @@ class EnrollmentAdmin(admin.ModelAdmin):
 class EnrollmentAdmin(admin.ModelAdmin):
     change_list_template = "path/to/change_form.html"
 
-    def get_urls(self):
-        urls = super(EnrollmentAdmin, self).get_urls()
-        print('11111111111111111111')
-        custom_urls = [
-        url('^import/$', self.process_import_btmp, name='process_import'),]
-        return custom_urls + urls
-    def process_import_btmp(self, request):
-       # import_custom = ImportCustom()
-        #count = import_custom.import_data()
-        self.message_user(request, f"создано 12 новых записей")
-        return HttpResponseRedirect("../")
 
 
 class ItemInline(admin.StackedInline):

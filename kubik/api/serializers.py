@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from users.models import User
+from user.models import User
 from course.models import Course, TimeTable
 
 

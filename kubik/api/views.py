@@ -2,7 +2,7 @@
 from django.shortcuts import render
 from rest_framework import generics, status, viewsets
 
-from users.models import User
+from user.models import User
 from course.models import Course
 from .serializers import UserSerializer, TeacherSerializer, CourseSerializer
 

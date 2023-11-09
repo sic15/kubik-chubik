@@ -1,6 +1,6 @@
 from django.db import models
 
-from users.models import User
+from user.models import User
 
 
 class TimeTable(models.Model):
@@ -29,7 +29,7 @@ class Course(models.Model):
     description = models.TextField(verbose_name='Описание')
     teacher = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='courses', verbose_name='Преподаватель')
     timetable = models.ManyToManyField(TimeTable, related_name='courses', verbose_name='Расписание')
-    capacity = models.PositiveSmallIntegerField(verbose_name='Максимальное число учеников', default=10)
+  #  capacity = models.PositiveSmallIntegerField(verbose_name='Максимальное число учеников', default=10)
     enrollers = models.PositiveSmallIntegerField(verbose_name='Количество учеников в группе', default=0)
 
     def __str__(self):

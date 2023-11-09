@@ -12,7 +12,7 @@ from course.models import Course, TimeTable, Application, Enrollment
 
 @admin.register(Application)
 class ApplicationAdmin(admin.ModelAdmin):
-    change_form_template = 'admin/course/change_form.html'
+    change_form_template = 'admin/course/change_form_application.html'
 
     def response_change(self, request, obj):
         if "applicate" in request.POST:
@@ -31,15 +31,18 @@ class ApplicationAdmin(admin.ModelAdmin):
 
 @admin.register(TimeTable)
 class TimeTableAdmin(admin.ModelAdmin):
-    change_form_template = 'admin/change_form.html'
+    pass
+  #  change_form_template = 'admin/change_form.html'
 
 @admin.register(Course)
 class CourseAdmin(admin.ModelAdmin):
-    change_form_template = 'admin/change_form.html'
+    pass
+  #  change_form_template = 'admin/change_form.html'
 
 @admin.register(Enrollment)
 class EnrollmentAdmin(admin.ModelAdmin):
-    change_form_template = 'admin/change_form.html'
+    pass
+  #  change_form_template = 'admin/change_form.html'
 """
 
     def get_urls(self):

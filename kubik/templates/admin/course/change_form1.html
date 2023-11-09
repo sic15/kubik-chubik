@@ -1,8 +1,0 @@
-{% extends 'admin/change_form.html' %}
-{% block object-tools %}
-  <form action="import/" method="POST">
-    {% csrf_token %}
-    <input type="submit" value="Зачислить" />
-  </form>
-    {{ block.super }}
-{% endblock %}

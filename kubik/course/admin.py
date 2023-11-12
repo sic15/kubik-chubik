@@ -4,6 +4,7 @@ from django.conf.urls import url
 from django.urls import path
 
 from course.models import Course, TimeTable, Application, Enrollment
+from user.models import User
 
 
 #admin.site.register(Course)
@@ -13,36 +14,40 @@ from course.models import Course, TimeTable, Application, Enrollment
 @admin.register(Application)
 class ApplicationAdmin(admin.ModelAdmin):
     change_form_template = 'admin/course/change_form_application.html'
+    list_display = ['student', 'course', 'approved']
+    readonly_fields = ['approved']
 
     def response_change(self, request, obj):
         if "applicate" in request.POST:
             context = {'student':obj.student, 'course':obj.course}
+            count_old = Enrollment.objects.all().count()
             Enrollment.objects.get_or_create(**context)
-            Application.objects.filter(id=obj.id).delete()
-         #   obj.approved = 1
+            # ниже вариант с удалением экземпляоа заявки на курс
+         #   Application.objects.filter(id=obj.id).delete()
+            obj.approved = 1
+            obj.save()
+            count_new = Enrollment.objects.all().count()
+            current_course = obj.course
+            if count_old < count_new:
+                current_course.enrollers += 1
+            current_course.save()
             return HttpResponseRedirect("../")
         return super().response_change(request, obj)
 
- #   def get_urls(self):
- #       urls = super().get_urls()
- ##       print('11111111111')
-  #      return urls
-  #  pass
 
 @admin.register(TimeTable)
 class TimeTableAdmin(admin.ModelAdmin):
     pass
-  #  change_form_template = 'admin/change_form.html'
 
 @admin.register(Course)
 class CourseAdmin(admin.ModelAdmin):
     pass
-  #  change_form_template = 'admin/change_form.html'
 
 @admin.register(Enrollment)
 class EnrollmentAdmin(admin.ModelAdmin):
     pass
-  #  change_form_template = 'admin/change_form.html'
+
+
 """
 
     def get_urls(self):
@@ -60,10 +65,6 @@ class EnrollmentAdmin(admin.ModelAdmin):
     # переопределяем атрибут для принудительного использования нашего шаблона:
     """
     
-
-
-
- #   change_list_template = "admin/change_list1.html"
 """
 @admin.register(Enrollment)
 class EnrollmentAdmin(admin.ModelAdmin):

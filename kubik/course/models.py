@@ -25,9 +25,15 @@ class TimeTable(models.Model):
 
 
 class Course(models.Model):
+    class NewManager(models.Manager):
+        def get_queryset(self):
+            return super().get_queryset().filter(status='published')
+
     title = models.CharField(max_length=200, verbose_name='Название')
     description = models.TextField(verbose_name='Описание')
-    teacher = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='courses', verbose_name='Преподаватель')
+    teacher = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, 
+                                related_name='courses', verbose_name='Преподаватель', 
+                                limit_choices_to={'type': 'teacher'})
     timetable = models.ManyToManyField(TimeTable, related_name='courses', verbose_name='Расписание')
     capacity = models.PositiveSmallIntegerField(verbose_name='Максимальное число учеников', default=10)
     enrollers = models.PositiveSmallIntegerField(verbose_name='Количество учеников в группе', default=0)

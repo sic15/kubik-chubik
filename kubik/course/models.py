@@ -47,7 +47,8 @@ class Course(models.Model):
 
 
 class StudentCourse(models.Model):
-    student = models.ForeignKey(User, related_name='%(class)s', on_delete=models.CASCADE, verbose_name='Студент')
+    student = models.ForeignKey(User, related_name='%(class)s', on_delete=models.CASCADE, verbose_name='Студент',
+                                limit_choices_to={'type': 'student'})
     course = models.ForeignKey(Course, related_name='%(class)s', on_delete=models.CASCADE, verbose_name='Курс')
 
     def __str__(self) -> str:

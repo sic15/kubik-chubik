@@ -22,7 +22,7 @@ def enrollment(obj):
         if new_course_count > current_course_count:
             obj.approved = 1
             obj.save()
-            current_course.enrollers += 1
+          #  current_course.enrollers += 1
             current_course.save()
     #   ниже вариант с удалением экземпляра заявки на курс
     #   Application.objects.filter(id=obj.id).delete()
@@ -41,7 +41,6 @@ class ApplicationAdmin(admin.ModelAdmin):
 
     def response_change(self, request, obj):
         if "apply" in request.POST:
-            print('111111111')
             enrollment(obj)
             return HttpResponseRedirect("../")
         return super().response_change(request, obj)
@@ -58,18 +57,22 @@ class CourseAdmin(admin.ModelAdmin):
 
 @admin.register(Enrollment)
 class EnrollmentAdmin(admin.ModelAdmin):
+    pass
+"""
     def save_model(self, request, obj, form, change):
-      #  obj.course.enrollers += 1
+        print('метод save в админке')
+        obj.course.enrollers += 1
         obj.course.save()
         obj.save()
 
     def delete_queryset(self, request, queryset):
+        print('метод delete в админке')
         for obj in queryset:
             print('удалили студента')
             obj.course.enrollers -= 1
             obj.course.save()
         queryset.delete()
-
+"""
 
 """
 

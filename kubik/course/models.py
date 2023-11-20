@@ -79,11 +79,13 @@ class Enrollment(StudentCourse):
         verbose_name_plural = 'Участники курса'
     
     def save(self, *args, **kwargs):
+        print('метод save в модели')
         self.course.enrollers += 1
         self.course.save()
         super().save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):
+        print('метод delete в модели')
         self.course.enrollers -= 1
         self.course.save()
         super().delete(*args, **kwargs)

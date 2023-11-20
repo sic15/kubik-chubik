@@ -11,41 +11,64 @@ from user.models import User
 #admin.site.register(TimeTable)
 #admin.site.register(Enrollment)
 
+def enrollment(obj):
+    current_course = obj.course
+    context = {'student':obj.student, 'course':current_course}
+    current_course_count = current_course.enrollers
+    current_course_max = current_course.capacity
+    if current_course_count < current_course_max:
+        Enrollment.objects.get_or_create(**context)
+        new_course_count = current_course.enrollers
+        if new_course_count > current_course_count:
+            obj.approved = 1
+            obj.save()
+            current_course.enrollers += 1
+            current_course.save()
+    #   ниже вариант с удалением экземпляра заявки на курс
+    #   Application.objects.filter(id=obj.id).delete()
+
+@admin.action(description="Зачислить выбранных участников")
+def apply(modeladmin, request, queryset):
+    for obj in queryset:
+        enrollment(obj)
+
 @admin.register(Application)
 class ApplicationAdmin(admin.ModelAdmin):
     change_form_template = 'admin/course/change_form_application.html'
     list_display = ['student', 'course', 'approved']
     readonly_fields = ['approved']
+    actions = [apply]
 
     def response_change(self, request, obj):
-        if "applicate" in request.POST:
-            context = {'student':obj.student, 'course':obj.course}
-            count_old = Enrollment.objects.all().count()
-            Enrollment.objects.get_or_create(**context)
-            # ниже вариант с удалением экземпляоа заявки на курс
-         #   Application.objects.filter(id=obj.id).delete()
-            obj.approved = 1
-            obj.save()
-            count_new = Enrollment.objects.all().count()
-            current_course = obj.course
-            if count_old < count_new:
-                current_course.enrollers += 1
-            current_course.save()
+        if "apply" in request.POST:
+            print('111111111')
+            enrollment(obj)
             return HttpResponseRedirect("../")
         return super().response_change(request, obj)
-
-
+    
+    
 @admin.register(TimeTable)
 class TimeTableAdmin(admin.ModelAdmin):
     pass
 
 @admin.register(Course)
 class CourseAdmin(admin.ModelAdmin):
+
     pass
 
 @admin.register(Enrollment)
 class EnrollmentAdmin(admin.ModelAdmin):
-    pass
+    def save_model(self, request, obj, form, change):
+      #  obj.course.enrollers += 1
+        obj.course.save()
+        obj.save()
+
+    def delete_queryset(self, request, queryset):
+        for obj in queryset:
+            print('удалили студента')
+            obj.course.enrollers -= 1
+            obj.course.save()
+        queryset.delete()
 
 
 """

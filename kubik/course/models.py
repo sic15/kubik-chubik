@@ -77,3 +77,13 @@ class Enrollment(StudentCourse):
     class Meta(StudentCourse.Meta):
         verbose_name = 'Участник курса'
         verbose_name_plural = 'Участники курса'
+    
+    def save(self, *args, **kwargs):
+        self.course.enrollers += 1
+        self.course.save()
+        super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        self.course.enrollers -= 1
+        self.course.save()
+        super().delete(*args, **kwargs)

@@ -12,18 +12,17 @@ from user.models import User
 #admin.site.register(Enrollment)
 
 def enrollment(obj):
-    current_course = obj.course
-    context = {'student':obj.student, 'course':current_course}
-    current_course_count = current_course.enrollers
-    current_course_max = current_course.capacity
+    context = {'student':obj.student, 'course':obj.course}
+    current_course_count = obj.course.enrollers
+    current_course_max = obj.course.capacity
     if current_course_count < current_course_max:
-        Enrollment.objects.get_or_create(**context)
-        new_course_count = current_course.enrollers
-        if new_course_count > current_course_count:
-            obj.approved = 1
-            obj.save()
+        Enrollment.objects.create(**context)
+      #  new_course_count = obj.course.enrollers
+      #  if new_course_count > current_course_count:
+        obj.approved = 1
+        obj.save()
           #  current_course.enrollers += 1
-            current_course.save()
+        obj.course.save()
     #   ниже вариант с удалением экземпляра заявки на курс
     #   Application.objects.filter(id=obj.id).delete()
 

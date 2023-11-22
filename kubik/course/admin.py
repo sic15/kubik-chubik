@@ -1,10 +1,13 @@
 from django.contrib import admin
-from django.http import HttpResponseRedirect        
+from django.http import HttpResponse, HttpResponseRedirect        
 from django.conf.urls import url
+from django.http.request import HttpRequest
 from django.urls import path
 
 from course.models import Course, TimeTable, Application, Enrollment
 from user.models import User
+from typing import Any, Union
+from django.shortcuts import get_object_or_404
 
 
 #admin.site.register(Course)
@@ -37,6 +40,20 @@ class ApplicationAdmin(admin.ModelAdmin):
     list_display = ['student', 'course', 'approved']
     readonly_fields = ['approved']
     actions = [apply]
+
+    def get_enroll_status(self):
+        pass
+
+    def changeform_view(self, request: HttpRequest, object_id: str = ..., form_url: str = ..., extra_context: dict[str, bool] = ...) -> Any:
+        extra_context = extra_context or {}
+        try:
+            application = Application.objects.get(id=object_id)
+            if Enrollment.objects.filter(course=application.course, student=application.student):
+                extra_context['enrolled'] = True
+        except:
+            pass
+        
+        return super().changeform_view(request, object_id, form_url, extra_context=extra_context)
 
     def response_change(self, request, obj):
         if "apply" in request.POST:

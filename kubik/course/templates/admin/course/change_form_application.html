@@ -3,10 +3,13 @@
 
 {% block submit_buttons_bottom %}
 
+{% if not enrolled %}
 <form action="import/" method="POST">
   {% csrf_token %}
   <input type="submit" value="Зачислить на курс" name='apply'/>
 </form>
+{% endif %}
   {{ block.super }}
+
 
 {% endblock %}
